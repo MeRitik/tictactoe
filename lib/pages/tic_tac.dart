@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:tictac/modal/game_modal.dart';
 
@@ -65,86 +66,130 @@ class _TicTacToeState extends State<TicTacToe> {
     });
   }
 
+  bool _isTopBorder(int index) {
+    return index > 2;
+  }
+
+  bool _isLeftBorder(int index) {
+    return index % 3 != 0;
+  }
+
+  bool _isRightBorder(int index) {
+    return index % 3 != 2;
+  }
+
+  bool _isBottomBorder(int index) {
+    return index ~/ 3 != 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Tic Tac Toe"),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        centerTitle: true,
-      ),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: GridView.builder(
-                shrinkWrap: true,
-                itemCount: 9,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 3,
-                  crossAxisSpacing: 4,
-                ),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () => _makeMove(index),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Center(
-                        child: Text(
-                          board[index],
-                          style: TextStyle(
-                            color: board[index] == 'X'
-                                ? Colors.green.shade200
-                                : Colors.red.shade200,
-                            fontSize: 72,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF7E42F5),
+              Color(0xFFB09AF6),
+            ],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: 9,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    // mainAxisSpacing: 1,
+                    // crossAxisSpacing: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => _makeMove(index),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: _isTopBorder(index)
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              width: 4,
+                            ),
+                            left: BorderSide(
+                              color: _isLeftBorder(index)
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              width: 4,
+                            ),
+                            right: BorderSide(
+                              color: _isRightBorder(index)
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              width: 4,
+                            ),
+                            bottom: BorderSide(
+                              color: _isBottomBorder(index)
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              width: 4,
+                            ),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            board[index],
+                            style: GoogleFonts.montserrat(
+                                textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 72,
+                              fontWeight: FontWeight.bold,
+                            )),
                           ),
                         ),
                       ),
+                    );
+                  }),
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    winner.isNotEmpty ? 'Winner: $winner' : '',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.lightGreen,
                     ),
-                  );
-                }),
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  winner.isNotEmpty ? 'Winner: $winner' : '',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.lightGreen,
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          ElevatedButton.icon(
-            icon: Icon(
-              Icons.restore_outlined,
-              size: 18,
-              color: Colors.greenAccent.shade700,
-            ),
-            label: Text(
-              'Reset Board',
-              style: TextStyle(
-                color: Colors.greenAccent.shade700,
+                ],
               ),
             ),
-            onPressed: _resetBoard,
-          ),
-        ],
+            const SizedBox(
+              height: 32,
+            ),
+            ElevatedButton.icon(
+              icon: Icon(
+                Icons.restore_outlined,
+                size: 18,
+                color: Colors.greenAccent.shade700,
+              ),
+              label: Text(
+                'Reset Board',
+                style: TextStyle(
+                  color: Colors.greenAccent.shade700,
+                ),
+              ),
+              onPressed: _resetBoard,
+            ),
+          ],
+        ),
       ),
     );
   }

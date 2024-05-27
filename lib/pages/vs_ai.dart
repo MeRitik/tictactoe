@@ -49,7 +49,9 @@ class _TicTacToeBotState extends State<TicTacToeBot> {
         xMoves = !xMoves;
         winner = _checkWinner();
         if (winner == '' && !xMoves) {
-          _makeBotMove();
+          Future.delayed(const Duration(milliseconds: 150)).then((val) {
+            _makeBotMove();
+          });
         }
       }
     });
